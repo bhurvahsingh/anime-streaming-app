@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeHub - App Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #FF6B6B;
+            font-size: 2.5em;
+            text-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #4ECDC4;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .screen {
+            background: #16213e;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 107, 107, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .screen:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(255, 107, 107, 0.3);
+        }
+        
+        .phone-frame {
+            background: #000;
+            padding: 12px;
+            border-radius: 40px;
+            border: 8px solid #1a1a1a;
+            aspect-ratio: 9/16;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 25px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+        
+        .screen-content {
+            width: 100%;
+            height: 100%;
+            background: #0f0f1e;
+            overflow: hidden;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .screen-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 107, 107, 0.1);
+        }
+        
+        .header-title {
+            color: #FF6B6B;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .screen-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        
+        .anime-item {
+            background: #16213e;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .anime-item:active {
+            transform: scale(0.98);
+        }
+        
+        .anime-thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .anime-info {
+            padding: 10px;
+        }
+        
+        .anime-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+        }
+        
+        .anime-meta {
+            font-size: 11px;
+            color: rgba(224, 224, 224, 0.6);
+        }
+        
+        .settings-panel {
+            background: #16213e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .setting-label {
+            font-size: 12px;
+            color: #4ECDC4;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .setting-value {
+            font-size: 11px;
+            color: rgba(224, 224, 224, 0.7);
+            padding: 8px;
+            background: #0f0f1e;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            margin-top: 15px;
+            padding: 20px;
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #FF6B6B;
+            border-radius: 8px;
+        }
+        
+        .screen-label {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #FF6B6B;
+        }
+        
+        .features-section {
+            background: #16213e;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 107, 107, 0.2);
+        }
+        
+        .features-title {
+            font-size: 1.8em;
+            color: #FF6B6B;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .feature-card {
+            background: #0f0f1e;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-name {
+            font-size: 1.1em;
+            color: #4ECDC4;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .feature-desc {
+            font-size: 0.9em;
+            color: rgba(224, 224, 224, 0.7);
+        }
+        
+        .tech-stack {
+            background: #16213e;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(78, 205, 196, 0.2);
+        }
+        
+        .tech-title {
+            font-size: 1.8em;
+            color: #4ECDC4;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .tech-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .tech-item {
+            background: #0f0f1e;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #4ECDC4;
+        }
+        
+        .tech-category {
+            font-weight: 600;
+            color: #4ECDC4;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+        
+        .tech-list {
+            font-size: 0.85em;
+            color: rgba(224, 224, 224, 0.7);
+            line-height: 1.8;
+        }
+        
+        .cta-section {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+        
+        .cta-title {
+            font-size: 2em;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .cta-desc {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 25px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #FF6B6B;
+            font-weight: bold;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+            font-size: 1.1em;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎬 AnimeHub - App Preview</h1>
+        <p class="subtitle">Lightweight Anime Streaming App Optimized for Redmi 6A</p>
+        
+        <!-- Screen Previews -->
+        <div class="preview-grid">
+            <!-- Home Screen -->
+            <div class="screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="header-title">🎬 AnimeHub</div>
+                        </div>
+                        <div class="screen-body">
+                            <div style="color: #FF6B6B; font-weight: 600; margin-bottom: 10px;">🔥 Trending</div>
+                            <div class="anime-item">
+                                <div class="anime-thumbnail" style="background: linear-gradient(135deg, #FF6B6B, #FF8E8E);">🔥</div>
+                                <div class="anime-info">
+                                    <div class="anime-title">Demon Slayer</div>
+                                    <div class="anime-meta">25 episodes</div>
+                                </div>
+                            </div>
+                            <div class="anime-item">
+                                <div class="anime-thumbnail" style="background: linear-gradient(135deg, #4ECDC4, #45D5B8);">⚡</div>
+                                <div class="anime-info">
+                                    <div class="anime-title">Attack on Titan</div>
+                                    <div class="anime-meta">75 episodes</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="screen-label">📱 Home Screen</div>
+            </div>
+            
+            <!-- Language Selection -->
+            <div class="screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="header-title">⚙️ Preferences</div>
+                        </div>
+                        <div class="screen-body">
+                            <div class="settings-panel">
+                                <div class="setting-label">🌍 Language</div>
+                                <div class="setting-value">English</div>
+                                <div class="setting-value">हिंदी (Hindi)</div>
+                                <div class="setting-value">日本語 (Japanese)</div>
+                            </div>
+                            <div class="settings-panel">
+                                <div class="setting-label">🎙️ Audio Type</div>
+                                <div class="setting-value">Subtitle</div>
+                                <div class="setting-value">Dubbed</div>
+                            </div>
+                            <div class="settings-panel">
+                                <div class="setting-label">📺 Quality</div>
+                                <div class="setting-value">480p (Low)</div>
+                                <div class="setting-value">720p (Standard)</div>
+                                <div class="setting-value">1080p (HD)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="screen-label">🌍 Language Settings</div>
+            </div>
+            
+            <!-- Watch Page -->
+            <div class="screen">
+                <div class="phone-frame">
+                    <div class="screen-content">
+                        <div class="screen-header">
+                            <div class="header-title">▶️ Now Playing</div>
+                        </div>
+                        <div class="screen-body">
+                            <div style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4); height: 100px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2em; margin-bottom: 15px;">▶️</div>
+                            <div class="anime-item">
+                                <div class="anime-info">
+                                    <div class="anime-title">Demon Slayer - Episode 12</div>
+                                    <div class="anime-meta">English | Dub | 720p</div>
+                                </div>
+                            </div>
+                            <div class="anime-item">
+                                <div class="anime-info">
+                                    <div class="anime-title">Continue Watching</div>
+                                    <div class="anime-meta">Progress: 45:30 / 1:24:00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="screen-label">▶️ Watch Screen</div>
+            </div>
+        </div>
+        
+        <!-- Features Section -->
+        <div class="features-section">
+            <div class="features-title">✨ Key Features</div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <div class="feature-name">HLS Streaming</div>
+                    <div class="feature-desc">Adaptive bitrate streaming with 480p, 720p, 1080p quality options</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <div class="feature-name">Multi-Language</div>
+                    <div class="feature-desc">English (Dub/Sub), Hindi Dub, Japanese Sub with automatic fallback</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-name">PWA App</div>
+                    <div class="feature-desc">Install on home screen, offline support, no app store needed</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-name">Lightweight</div>
+                    <div class="feature-desc">< 5MB app size, optimized for 1GB RAM devices (Redmi 6A)</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <div class="feature-name">Watchlist</div>
+                    <div class="feature-desc">Save favorites, track progress, continue watching feature</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <div class="feature-name">Reviews & Ratings</div>
+                    <div class="feature-desc">Rate anime 1-5 stars, read community reviews and comments</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-name">Search & Filter</div>
+                    <div class="feature-desc">Find anime by title, genre, year, status with instant results</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <div class="feature-name">Notifications</div>
+                    <div class="feature-desc">Get alerts for new episodes and updates from your watchlist</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-name">Download Tracking</div>
+                    <div class="feature-desc">Track and manage downloaded episodes for offline viewing</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tech Stack Section -->
+        <div class="tech-stack">
+            <div class="tech-title">⚙️ Technology Stack</div>
+            
+            <h3 style="color: #FF6B6B; margin: 20px 0 10px; font-size: 1.3em;">Backend</h3>
+            <div class="tech-row">
+                <div class="tech-item">
+                    <div class="tech-category">Runtime</div>
+                    <div class="tech-list">Node.js 16+ (Alpine)</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">Web Framework</div>
+                    <div class="tech-list">Express.js</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">Database</div>
+                    <div class="tech-list">PostgreSQL 14<br>Redis 7</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">Authentication</div>
+                    <div class="tech-list">JWT + Bcrypt</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #4ECDC4; margin: 20px 0 10px; font-size: 1.3em;">Frontend</h3>
+            <div class="tech-row">
+                <div class="tech-item">
+                    <div class="tech-category">Language</div>
+                    <div class="tech-list">Vanilla JavaScript<br>HTML5 + CSS3</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">App Type</div>
+                    <div class="tech-list">Progressive Web App<br>(PWA)</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">Features</div>
+                    <div class="tech-list">Service Worker<br>Offline Support<br>Lazy Loading</div>
+                </div>
+            </div>
+            
+            <h3 style="color: #FF6B6B; margin: 20px 0 10px; font-size: 1.3em;">DevOps</h3>
+            <div class="tech-row">
+                <div class="tech-item">
+                    <div class="tech-category">Containerization</div>
+                    <div class="tech-list">Docker + Alpine<br>Docker Compose</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">Package Size</div>
+                    <div class="tech-list">~50MB Total<br>~5MB Frontend</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-category">Memory Usage</div>
+                    <div class="tech-list">80-150MB RAM<br>Perfect for 1GB devices</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Performance Section -->
+        <div class="features-section">
+            <div class="features-title">⚡ Performance Metrics</div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-name">Page Load</div>
+                    <div class="feature-desc">&lt; 3 seconds on 4G LTE</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-name">Bundle Size</div>
+                    <div class="feature-desc">Frontend: &lt; 150KB compressed</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-name">Memory Usage</div>
+                    <div class="feature-desc">80-150MB total (app + db)</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <div class="feature-name">CPU Usage</div>
+                    <div class="feature-desc">Minimal on dual-core CPUs</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎥</div>
+                    <div class="feature-name">Video Streaming</div>
+                    <div class="feature-desc">HLS with adaptive quality</div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-name">Compression</div>
+                    <div class="feature-desc">GZIP on all responses</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <div class="cta-title">🚀 Ready to Stream?</div>
+            <div class="cta-desc">Get started with AnimeHub - Clone from GitHub and deploy in minutes</div>
+            <a href="https://github.com/bhurvahsingh/anime-streaming-app" class="cta-button">View on GitHub</a>
+        </div>
+    </div>
+</body>
+</html>
